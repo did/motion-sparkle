@@ -10,22 +10,28 @@
 #define SUAPPCAST_H
 
 @class SUAppcastItem;
-@interface SUAppcast : NSObject {
+@interface SUAppcast : NSObject
+{
+@private
 	NSArray *items;
-	NSString *userAgentString;
+    NSMutableDictionary *appcastValues;
 	id delegate;
-	NSMutableData *incrementalData;
+	NSString *downloadFilename;
+	NSURLDownload *download;
 }
 
 - (void)fetchAppcastFromURL:(NSURL *)url;
-- (void)setDelegate:delegate;
+- (void)setDelegate:(id)delegate;
 - (void)setUserAgentString:(NSString *)userAgentString;
+- (void)setAppcastValue:(NSString *)value forKey:(NSString *)key;
+- (void)setAllAppcastValues:(NSDictionary *)inAppcastValues;
 
 - (NSArray *)items;
 
 @end
 
 @interface NSObject (SUAppcastDelegate)
+- (void)appcast:(SUAppcast *)appcast willFetchURLRequest:(NSMutableURLRequest *)request;
 - (void)appcastDidFinishLoading:(SUAppcast *)appcast;
 - (void)appcast:(SUAppcast *)appcast failedToLoadWithError:(NSError *)error;
 @end
